@@ -37,15 +37,15 @@ body::-webkit-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
   transform: translate(100%, 0);
-  transition: transform 400ms ease-out;
+  transition: all 400ms ease-out;
 }
 
-.modal.fadeModal {
+.modal.slideOutModal {
   opacity: 0;
   transform: translate(100%, 0);
 }
 
-.modal.fadeModal.show {
+.modal.slideOutModal.show {
   opacity: 1;
   transform: translate(0, 0);
 }
@@ -134,7 +134,16 @@ body::-webkit-scrollbar {
 }
 
 .backButton {
+  opacity: 0;
+  transform: translateX(70%);
   font-size: 24px;
+  transition: all 350ms ease-in;
+  transition-delay: 700ms;
+}
+.backButton.slideIn {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 350ms ease-in;
 }
 
 .search_container {

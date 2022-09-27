@@ -60,24 +60,27 @@ $(document).ready(() => {
     const backButton = itemModal.querySelector(".backButton");
 
     itemHeader.addEventListener("click", () => {
+      // Set modal padding in order to mimic container padding dinamically
       itemModal.style.paddingLeft = containerPaddingLeft;
       itemModal.style.paddingRight = containerPaddingRight;
 
-      itemModal.classList.add("fadeModal");
+      itemModal.classList.add("slideOutModal");
 
       // Show Modal
       $(itemModal).modal("show");
-
-      // Set modal padding in order to mimic container padding dinamically
+      itemModal.addEventListener("transitionend", function () {
+        backButton.classList.add("slideIn");
+      });
     });
 
     backButton.addEventListener("click", () => {
-      itemModal.classList.remove("fadeModal");
+      itemModal.classList.remove("slideOutModal");
 
       itemModal.addEventListener(
         "transitionend",
         function () {
           $(itemModal).modal("hide");
+          backButton.classList.remove("slideIn");
         },
         { once: true }
       );
