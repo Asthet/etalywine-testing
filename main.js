@@ -1,27 +1,35 @@
 function handleModalSizing(modals, headerHeight) {
-  const device = document.querySelector(".device");
-  let windowHeight = device.clientHeight;
-  let windowWidth = device.clientWidth;
-  let windowLeft = device.getBoundingClientRect().left;
+  // select container element and get left position to eventually fix modal pos
+  const container = document.querySelector("body");
+  let containerLeft = container.getBoundingClientRect().left; // unuseful if container is "body" tag
+
+  // Get window height and width
+  let windowHeight = window.clientHeight;
+  let windowWidth = window.clientWidth;
+
+  // Dynamically set modals w and h to cover
+  // window height (excluding header) and window width
+
   let modalHeight = `${windowHeight - headerHeight}px`;
   let modalWidth = `${windowWidth}px`;
 
-  // Get container padding to resize modal width
-  //let containerPaddingLeft = $(".page.container").css("padding-left");
-  //let containerPaddingRight = $(".page.container").css("padding-right");
+  // Get container padding to adapt modals inner spacing
+  let containerPaddingLeft = $(container).css("padding-left");
+  let containerPaddingRight = $(container).css("padding-right");
 
   modals.forEach(modal => {
     let modalDialog = modal.querySelector(".modal-dialog");
 
     // Modal
     modal.style.top = `${headerHeight}px`;
-    modal.style.left = `${windowLeft + parseFloat($(device).css("border-left"))}px`;
+    modal.style.left = `${containerLeft}px`;
     modal.style.height = modalHeight;
-    //modal.style.marginLeft = `-${containerPaddingLeft}`;
-    //modal.style.marginRight = `-${containerPaddingRight}`;
+    modal.style.paddingLeft = `${containerPaddingLeft}`;
+    modal.style.paddingRight = `${containerPaddingRight}`;
 
     modal.style.width = modalWidth;
 
+    // If a modal-dialog element exists set same w & h used for modal
     if (modalDialog) {
       // Modal Dialog
       modalDialog.style.height = `${modalHeight}`;
