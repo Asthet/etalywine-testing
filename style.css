@@ -20,7 +20,6 @@ body::-webkit-scrollbar {
 }
 .container.page {
   margin: 0;
-  padding: 30px;
   width: 100% !important;
   max-width: 100% !important;
 }
