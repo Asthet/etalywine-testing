@@ -1,11 +1,11 @@
-function handleModalSizing(containerEl, modals, offsetHeight) {
+function handleModalSizing(containerEl, modals, offsetHeight = 0) {
   // select container element and get left position to eventually fix modal pos
   const container = containerEl;
   let containerLeft = container.getBoundingClientRect().left; // unuseful if container is "body" tag
 
   // Get window height and width
-  let windowHeight = window.clientHeight;
-  let windowWidth = window.clientWidth;
+  let windowHeight = window.innerHeight;
+  let windowWidth = window.innerWidth;
 
   // Dynamically set modals w and h to cover
   // window height (excluding header) and window width
@@ -21,13 +21,6 @@ function handleModalSizing(containerEl, modals, offsetHeight) {
     modal.style.left = `${containerLeft}px`;
     modal.style.height = modalHeight;
     modal.style.width = modalWidth;
-
-    // If a modal-dialog element exists set same w & h used for modal
-    if (modalDialog) {
-      // Modal Dialog
-      modalDialog.style.height = `${modalHeight}`;
-      modalDialog.style.maxHeight = `${modalHeight}`;
-    }
   });
 }
 
@@ -35,7 +28,7 @@ $(document).ready(() => {
   const container = document.querySelector("body");
   const header = document.querySelector("#header");
   const search = document.querySelector(".search_container");
-  const backButton = $("#backButton");
+
   const items = document.querySelectorAll(".stand-item");
   const modals = document.querySelectorAll(".modal");
 
@@ -46,21 +39,24 @@ $(document).ready(() => {
   items.forEach(item => {
     let itemHeader = item.querySelector(".stand-item_header");
     let itemModal = item.querySelector(".modal");
+    const backButton = itemModal.querySelector(".backButton");
+    console.log(backButton);
 
     itemHeader.addEventListener("click", () => {
+      // Show Modal
+      $(itemModal).modal("show");
+
       // Set modal padding in order to mimic container padding dinamically
 
       itemModal.style.paddingLeft = containerPaddingLeft;
       itemModal.style.paddingRight = containerPaddingRight;
-
-      // Show Modal
-      $(itemModal).modal("show");
     });
-  });
 
-  // Hide modals
-  backButton.on("click", function () {
-    $(".modal").modal("hide");
+    backButton.addEventListener("click", () => {
+      console.log("click");
+      // Hide modals
+      $(itemModal).modal("hide");
+    });
   });
 
   // Get header height to dynamically set an offset for modal & search positioning
@@ -69,26 +65,15 @@ $(document).ready(() => {
 
   //Handle modals sizing on DOM ready
 
-  handleModalSizing(container, modals, headerHeight);
+  handleModalSizing(container, modals);
 
   //Handle search "top" offset by headerHeight
 
   search.style.top = `${headerHeight}px`;
 
-  // Toggle .nav-left/.backButton depending on modal events triggered by shown/hidden state
-
-  $(modals).on("shown.bs.modal", function (event) {
-    header.querySelector(".nav-left").classList.add("d-none");
-    header.querySelector(".backButton").classList.remove("d-none");
-  });
-  $(modals).on("hidden.bs.modal", function (event) {
-    header.querySelector(".nav-left").classList.remove("d-none");
-    header.querySelector(".backButton").classList.add("d-none");
-  });
-
   $(window).resize(function () {
     // Handle modals sizing on resize
 
-    handleModalSizing(container, modals, headerHeight);
+    handleModalSizing(container, modals);
   });
 });

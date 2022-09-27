@@ -30,16 +30,35 @@ body::-webkit-scrollbar {
 }
 
 .modal {
+  background: white;
   position: fixed;
   bottom: 0;
+  overflow: initial;
+  overscroll-behavior: contain;
+}
+.modal-header,
+.modal-body {
+  padding: 1rem 0;
 }
 
+.modal-content {
+  height: 100%;
+  max-height: 100%;
+  overflow-x: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
 .modal-dialog {
   margin: 0;
   position: static;
   height: 100%;
   width: 100% !important;
   max-width: 100% !important;
+  margin-bottom: 35px;
 }
 
 .stand-item_header-details {
@@ -86,12 +105,17 @@ body::-webkit-scrollbar {
   border: none;
 }
 
-#header {
+#header,
+.modal-nav {
   position: sticky;
   background-color: white;
   top: 0;
   padding-bottom: 16px;
   z-index: 99;
+}
+
+.modal-nav {
+  z-index: 99999;
 }
 .nav-left {
   display: flex;
@@ -152,19 +176,6 @@ body::-webkit-scrollbar {
   color: rgba(136, 71, 64, 1);
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.modal::-webkit-scrollbar,
-.modal-dialog-scrollable .modal-body::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.modal,
-.modal-dialog-scrollable .modal-body {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
 .modal-header {
   display: flex;
   flex-direction: column;
@@ -178,7 +189,7 @@ body::-webkit-scrollbar {
 }
 
 .halo {
-  position: sticky;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
