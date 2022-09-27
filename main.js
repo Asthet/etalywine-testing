@@ -36,29 +36,6 @@ $(document).ready(() => {
   const containerPaddingLeft = $(container).css("padding-left");
   const containerPaddingRight = $(container).css("padding-right");
 
-  items.forEach(item => {
-    let itemHeader = item.querySelector(".stand-item_header");
-    let itemModal = item.querySelector(".modal");
-    const backButton = itemModal.querySelector(".backButton");
-    console.log(backButton);
-
-    itemHeader.addEventListener("click", () => {
-      // Show Modal
-      $(itemModal).modal("show");
-
-      // Set modal padding in order to mimic container padding dinamically
-
-      itemModal.style.paddingLeft = containerPaddingLeft;
-      itemModal.style.paddingRight = containerPaddingRight;
-    });
-
-    backButton.addEventListener("click", () => {
-      console.log("click");
-      // Hide modals
-      $(itemModal).modal("hide");
-    });
-  });
-
   // Get header height to dynamically set an offset for modal & search positioning
 
   const headerHeight = header.offsetHeight;
@@ -75,5 +52,35 @@ $(document).ready(() => {
     // Handle modals sizing on resize
 
     handleModalSizing(container, modals);
+  });
+
+  items.forEach(item => {
+    let itemHeader = item.querySelector(".stand-item_header");
+    let itemModal = item.querySelector(".modal");
+    const backButton = itemModal.querySelector(".backButton");
+
+    itemHeader.addEventListener("click", () => {
+      itemModal.style.paddingLeft = containerPaddingLeft;
+      itemModal.style.paddingRight = containerPaddingRight;
+
+      itemModal.classList.add("fadeModal");
+
+      // Show Modal
+      $(itemModal).modal("show");
+
+      // Set modal padding in order to mimic container padding dinamically
+    });
+
+    backButton.addEventListener("click", () => {
+      itemModal.classList.remove("fadeModal");
+
+      itemModal.addEventListener(
+        "transitionend",
+        function () {
+          $(itemModal).modal("hide");
+        },
+        { once: true }
+      );
+    });
   });
 });

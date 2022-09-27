@@ -4,7 +4,11 @@ body,
   height: 100%;
 }
 
-body {
+body,
+body.modal-open {
+  margin: 0;
+  width: 100% !important;
+  max-width: 100% !important;
   overflow-y: scroll;
   position: relative;
   border-radius: 5px;
@@ -18,14 +22,11 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
-.container.page {
-  margin: 0;
-  width: 100% !important;
-  max-width: 100% !important;
-}
 
 .content {
   position: relative;
+  padding-bottom: 100px;
+  height: fit-content;
 }
 
 .modal {
@@ -35,7 +36,20 @@ body::-webkit-scrollbar {
   overscroll-behavior: contain;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  transform: translate(100%, 0);
+  transition: transform 400ms ease-out;
 }
+
+.modal.fadeModal {
+  opacity: 0;
+  transform: translate(100%, 0);
+}
+
+.modal.fadeModal.show {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
 .modal::-webkit-scrollbar {
   display: none;
 }
