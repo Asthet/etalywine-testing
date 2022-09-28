@@ -55,19 +55,16 @@ $(document).ready(() => {
 
     // GSAP TIMELINE
 
-    const modalTL = gsap.timeline({
+    const slideInModalTL = gsap.timeline({
       onStart: () => {
         // Set modal padding in order to mimic container padding dinamically
         itemModal.style.paddingLeft = containerPaddingLeft;
         itemModal.style.paddingRight = containerPaddingRight;
         $(itemModal).modal("show");
-      },
-      onReverseComplete: () => {
-        $(itemModal).modal("hide");
       }
     });
 
-    modalTL.fromTo(
+    slideInModalTL.fromTo(
       itemHeaderAll,
       { xPercent: 0, opacity: 1 },
       {
@@ -82,12 +79,9 @@ $(document).ready(() => {
       }
     );
 
-    modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, "<+=0.25");
-    modalTL.staggerFromTo(modalHeaderEl, 0.15, { opacity: 0 }, { opacity: 1, ease: "Power1.easeOut" }, 0.2, "enter", "<+=0.25");
-    modalTL.staggerFromTo(modalHeaderEl, 0.25, { yPercent: 30 }, { yPercent: 0, ease: "Power2.easeOut" }, 0.2, "enter", "<");
-    modalTL.fromTo(
+    slideInModalTL.fromTo(
       modalP,
-      { yPercent: -30, opacity: 0 },
+      { yPercent: -10, opacity: 0 },
       {
         yPercent: 0,
         opacity: 1,
@@ -95,22 +89,52 @@ $(document).ready(() => {
           from: "start",
           axis: "y",
           ease: "power2.in",
-          amount: 0.5
+          amount: 0.2
         }
       }
     );
-    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=1");
-    modalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, ">");
-    modalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, "<");
+    slideInModalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.25, ease: "power2.out" }, "<-=0.50");
+    slideInModalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.25 }, "<");
+    slideInModalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.25 }, ">");
+    slideInModalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.25 }, "<");
+    slideInModalTL.staggerFromTo(modalHeaderEl, 0.075, { opacity: 0 }, { opacity: 1, ease: "Power1.easeOut" }, 0.1, "<-=0.05");
+    slideInModalTL.staggerFromTo(modalHeaderEl, 0.1, { yPercent: 30 }, { yPercent: 0, ease: "Power2.easeOut" }, 0.1, "<");
 
-    modalTL.pause();
+    slideInModalTL.pause();
+
+    const slideOutModal = new gsap.timeline({
+      onEnd: () => {
+        $(itemModal).modal("show");
+      }
+    });
+
+    slideOutModal.set(itemHeaderAll, { xPercent: 0, opacity: 1 });
+    slideOutModal.to(itemModal, { xPercent: 100, duration: 0.35, ease: "power2.in" });
+
+    slideOutModal.pause();
 
     itemHeader.addEventListener("click", () => {
-      modalTL.restart();
+      history.pushState("modal-open", "null", "");
+      window.addEventListener(
+        "popstate",
+        () => {
+          slideOutModal.restart();
+          if (history.state == "modal-open") {
+            window.history.back();
+          }
+        },
+        {
+          once: true
+        }
+      );
+      slideInModalTL.restart();
     });
 
     backButton.addEventListener("click", () => {
-      modalTL.reverse();
+      slideOutModal.restart();
+      if (history.state == "modal-open") {
+        window.history.back();
+      }
     });
   });
 
