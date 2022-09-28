@@ -46,6 +46,7 @@ $(document).ready(() => {
     const itemModal = item.querySelector(".modal");
     const backButton = itemModal.querySelector(".backButton");
     const cartButton = itemModal.querySelector(".cart");
+    const modalHeader = itemModal.querySelector(".modal-header");
     const modalBTitle = itemModal.querySelector(".modal-b-title");
     const modalTitle = itemModal.querySelector(".modal-title");
     const modalBody = itemModal.querySelector(".modal-body");
@@ -81,8 +82,8 @@ $(document).ready(() => {
     );
 
     modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, "<+=0.25");
-    modalTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, ">");
-    modalTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<+=0.3");
+    modalTL.staggerFromTo(" * ", 1, { yPercent: 100 }, { yPercent: 0, ease: "Power2.easeOut" }, 0.2, "enter");
+    modalTL.staggerFromTo(" * ", 1, { opacity: 0.5 }, { opacity: 1, ease: "Power1.easeOut" }, 0.2, "enter");
     modalTL.fromTo(
       modalP,
       { yPercent: -30, opacity: 0 },
