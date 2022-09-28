@@ -6,9 +6,12 @@ $(document).ready(() => {
   //console.log(testTL);
   const container = document.querySelector("body");
   const header = document.querySelector("#header");
+  const navLeft = header.querySelector(".nav-left");
+  const navRight = header.querySelector(".nav-right");
   const search = document.querySelector(".search_container");
-
-  const items = document.querySelectorAll(".stand-item");
+  const itemsList = document.querySelector(".stand-items");
+  const items = itemsList.querySelectorAll(".stand-item");
+  const itemHeaderAll = itemsList.querySelectorAll(".stand-item_header");
   const modals = document.querySelectorAll(".modal");
 
   // Get container padding to dynamically adapt modals inner spacing
@@ -39,7 +42,7 @@ $(document).ready(() => {
 
     // GSAP TIMELINE
 
-    const openingTL = gsap.timeline({
+    const modalTL = gsap.timeline({
       onStart: () => {
         // Set modal padding in order to mimic container padding dinamically
         itemModal.style.paddingLeft = containerPaddingLeft;
@@ -51,35 +54,53 @@ $(document).ready(() => {
       }
     });
 
-    openingTL.fromTo(itemModal, { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 });
-    openingTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 }, "<+=0.25");
-    openingTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 }, "<");
-    openingTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35 }, "<");
-    openingTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35 }, "<+=0.15");
-    openingTL.fromTo(
+    modalTL.fromTo(navLeft, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 });
+    modalTL.fromTo(navRight, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, "<");
+    modalTL.fromTo(search, { yPercent: 0, opacity: 1 }, { yPercent: -30, opacity: 0, ease: "power2.in", duration: 0.15 }, "<+=0.03");
+    modalTL.fromTo(
+      itemHeaderAll,
+      { yPercent: 0, opacity: 1 },
+      {
+        yPercent: -60,
+        opacity: 0,
+        stagger: {
+          from: "start",
+          axis: "x",
+          ease: "power2.in",
+          amount: 0.15
+        }
+      }
+    );
+
+    modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, ">-=0.35");
+    modalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<");
+    modalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<");
+    modalTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, ">");
+    modalTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<+=0.25");
+    modalTL.fromTo(
       modalP,
       { yPercent: -30, opacity: 0 },
       {
         yPercent: 0,
         opacity: 1,
-        duration: 0.5,
         stagger: {
-          from: "end",
+          from: "start",
           axis: "y",
           ease: "power2.in",
-          amount: 2.5
+          amount: 0.5
         }
       }
     );
+    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=0.45");
 
-    openingTL.pause();
+    modalTL.pause();
 
     itemHeader.addEventListener("click", () => {
-      openingTL.play();
+      modalTL.play();
     });
 
     backButton.addEventListener("click", () => {
-      openingTL.reverse();
+      modalTL.reverse();
     });
   });
 

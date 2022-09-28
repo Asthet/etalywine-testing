@@ -51,6 +51,7 @@ body::-webkit-scrollbar {
   overscroll-behavior: contain;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  box-shadow: -3px 0px 10px -6px rgb(0 0 0 / 35%) !important;
 }
 
 /* .modal.slideOutModal {
@@ -129,8 +130,7 @@ body::-webkit-scrollbar {
 .stand-item_header-main i {
   color: rgba(0, 0, 0, 0.35);
 }
-
-.stand-item {
+.stand-item_header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   padding: 16px 0;
 }
