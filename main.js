@@ -63,16 +63,16 @@ $(document).ready(() => {
         stagger: {
           from: "start",
           axis: "x",
-          amount: 0.25
+          amount: 0.2
         }
       }
     );
-    modalTL.fromTo(navLeft, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, ">-=0.25");
+    /* modalTL.fromTo(navLeft, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, ">");
     modalTL.fromTo(navRight, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, "<");
-    modalTL.fromTo(search, { yPercent: 0, opacity: 1 }, { yPercent: -30, opacity: 0, ease: "power2.in", duration: 0.15 }, "<+=0.03");
+    modalTL.fromTo(search, { yPercent: 0, opacity: 1 }, { yPercent: -30, opacity: 0, ease: "power2.in", duration: 0.05 }, "<+=0.03"); */
 
-    modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, ">-=0.25");
-    modalTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, ">-=0.3");
+    modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, "<+=0.25");
+    modalTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, ">");
     modalTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<+=0.3");
     modalTL.fromTo(
       modalP,
@@ -88,14 +88,14 @@ $(document).ready(() => {
         }
       }
     );
-    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=0.55");
+    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=0.95");
     modalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, ">");
     modalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, "<");
 
     modalTL.pause();
 
     itemHeader.addEventListener("click", () => {
-      modalTL.play();
+      modalTL.restart();
     });
 
     backButton.addEventListener("click", () => {
