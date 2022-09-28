@@ -32,6 +32,10 @@ $(document).ready(() => {
     const itemModal = item.querySelector(".modal");
     const backButton = itemModal.querySelector(".backButton");
     const cartButton = itemModal.querySelector(".cart");
+    const modalBTitle = itemModal.querySelector(".modal-b-title");
+    const modalTitle = itemModal.querySelector(".modal-title");
+    const modalBody = itemModal.querySelector(".modal-body");
+    const modalP = modalBody.querySelectorAll("p");
 
     // GSAP TIMELINE
 
@@ -50,6 +54,24 @@ $(document).ready(() => {
     openingTL.fromTo(itemModal, { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 });
     openingTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 });
     openingTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 }, "<");
+    openingTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35 }, "<");
+    openingTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35 }, "<+=0.15");
+    openingTL.fromTo(
+      modalP,
+      { yPercent: -30, opacity: 0 },
+      {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.35,
+        stagger: {
+          from: "end",
+          axis: "y",
+          ease: "power2.in",
+          amount: 2.5
+        }
+      }
+    );
+
     openingTL.pause();
 
     itemHeader.addEventListener("click", () => {
