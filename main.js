@@ -29,6 +29,18 @@ $(document).ready(() => {
   //Handle search "top" offset by headerHeight
 
   search.style.top = `${headerHeight + 15}px`;
+  console.log(items);
+  search.addEventListener("keyup", e => {
+    [...items].map(item => {
+      let stand = item.querySelector(".stand-num");
+      let standText = stand.innerText.toLowerCase();
+      let standID = stand.dataset.stand;
+
+      let itemTitle = item.querySelector(".modal-title").innerText.toLowerCase();
+
+      !itemTitle.includes(e.target.value.toLowerCase()) ? ((itemTitle.includes(e.target.value.toLowerCase()) && standText.includes(e.target.value.toLowerCase())) || standID === e.target.value ? (item.style.display = "block") : (item.style.display = "none")) : (item.style.display = "block");
+    });
+  });
 
   items.forEach(item => {
     const itemHeader = item.querySelector(".stand-item_header");
