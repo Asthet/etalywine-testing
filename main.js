@@ -1,3 +1,77 @@
+// MAIN SCRIPT - ON DOCUMENT READY
+
+$(document).ready(() => {
+  /* let testTL = gsap.timeline();
+  testTL.to(".logo", { opacity: 0, duration: 1 }); */
+  //console.log(testTL);
+  const container = document.querySelector("body");
+  const header = document.querySelector("#header");
+  const search = document.querySelector(".search_container");
+
+  const items = document.querySelectorAll(".stand-item");
+  const modals = document.querySelectorAll(".modal");
+
+  // Get container padding to dynamically adapt modals inner spacing
+  const containerPaddingLeft = $(container).css("padding-left");
+  const containerPaddingRight = $(container).css("padding-right");
+
+  // Get header height to dynamically set an offset for modal & search positioning
+
+  const headerHeight = header.offsetHeight;
+
+  //Handle modals sizing on DOM ready
+
+  handleModalSizing(container, modals);
+
+  //Handle search "top" offset by headerHeight
+
+  search.style.top = `${headerHeight}px`;
+
+  items.forEach(item => {
+    const itemHeader = item.querySelector(".stand-item_header");
+    const itemModal = item.querySelector(".modal");
+    const backButton = itemModal.querySelector(".backButton");
+    const cartButton = itemModal.querySelector(".cart");
+
+    // GSAP TIMELINE
+
+    const openingTL = gsap.timeline({
+      onStart: () => {
+        // Set modal padding in order to mimic container padding dinamically
+        itemModal.style.paddingLeft = containerPaddingLeft;
+        itemModal.style.paddingRight = containerPaddingRight;
+        $(itemModal).modal("show");
+      },
+      onReverseComplete: () => {
+        $(itemModal).modal("hide");
+      }
+    });
+
+    openingTL.fromTo(itemModal, { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 });
+    openingTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 });
+    openingTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 }, "<");
+    openingTL.pause();
+
+    itemHeader.addEventListener("click", () => {
+      openingTL.play();
+    });
+
+    backButton.addEventListener("click", () => {
+      openingTL.reverse();
+    });
+  });
+
+  // MAIN SCRIPT - ON WINDOW RESIZE
+
+  $(window).resize(function () {
+    // Handle modals sizing on resize
+
+    handleModalSizing(container, modals);
+  });
+});
+
+// FUNCTIONS
+
 function handleModalSizing(containerEl, modals, offsetHeight = 0) {
   // select container element and get left position to eventually fix modal pos
   const container = containerEl;
@@ -23,67 +97,3 @@ function handleModalSizing(containerEl, modals, offsetHeight = 0) {
     modal.style.width = modalWidth;
   });
 }
-
-$(document).ready(() => {
-  const container = document.querySelector("body");
-  const header = document.querySelector("#header");
-  const search = document.querySelector(".search_container");
-
-  const items = document.querySelectorAll(".stand-item");
-  const modals = document.querySelectorAll(".modal");
-
-  // Get container padding to dynamically adapt modals inner spacing
-  const containerPaddingLeft = $(container).css("padding-left");
-  const containerPaddingRight = $(container).css("padding-right");
-
-  // Get header height to dynamically set an offset for modal & search positioning
-
-  const headerHeight = header.offsetHeight;
-
-  //Handle modals sizing on DOM ready
-
-  handleModalSizing(container, modals);
-
-  //Handle search "top" offset by headerHeight
-
-  search.style.top = `${headerHeight}px`;
-
-  $(window).resize(function () {
-    // Handle modals sizing on resize
-
-    handleModalSizing(container, modals);
-  });
-
-  items.forEach(item => {
-    let itemHeader = item.querySelector(".stand-item_header");
-    let itemModal = item.querySelector(".modal");
-    const backButton = itemModal.querySelector(".backButton");
-
-    itemHeader.addEventListener("click", () => {
-      // Set modal padding in order to mimic container padding dinamically
-      itemModal.style.paddingLeft = containerPaddingLeft;
-      itemModal.style.paddingRight = containerPaddingRight;
-
-      itemModal.classList.add("slideOutModal");
-
-      // Show Modal
-      $(itemModal).modal("show");
-      itemModal.addEventListener("transitionend", function () {
-        backButton.classList.add("slideIn");
-      });
-    });
-
-    backButton.addEventListener("click", () => {
-      itemModal.classList.remove("slideOutModal");
-
-      itemModal.addEventListener(
-        "transitionend",
-        function () {
-          $(itemModal).modal("hide");
-          backButton.classList.remove("slideIn");
-        },
-        { once: true }
-      );
-    });
-  });
-});

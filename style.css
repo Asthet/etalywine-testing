@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 9 version
+*/
+
 html,
 body,
 .content {
@@ -12,7 +19,12 @@ body.modal-open {
   overflow-y: scroll;
   position: relative;
   border-radius: 5px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -26,6 +38,8 @@ body::-webkit-scrollbar {
 .content {
   position: relative;
   padding-bottom: 100px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
 }
 
@@ -33,22 +47,25 @@ body::-webkit-scrollbar {
   background: white;
   position: fixed;
   bottom: 0;
+  -ms-scroll-chaining: none;
   overscroll-behavior: contain;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-  transform: translate(100%, 0);
-  transition: all 400ms ease-out;
 }
 
-.modal.slideOutModal {
+/* .modal.slideOutModal {
   opacity: 0;
+  -webkit-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
   transform: translate(100%, 0);
 }
 
 .modal.slideOutModal.show {
   opacity: 1;
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
   transform: translate(0, 0);
-}
+} */
 
 .modal::-webkit-scrollbar {
   display: none;
@@ -73,9 +90,13 @@ body::-webkit-scrollbar {
 }
 
 .stand-item_header-details {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 6px;
   font-size: 14px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   color: rgba(0, 0, 0, 0.35);
 }
@@ -84,6 +105,8 @@ body::-webkit-scrollbar {
   width: 1px;
   height: 14px;
   background: rgba(0, 0, 0, 0.35);
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
@@ -93,7 +116,11 @@ body::-webkit-scrollbar {
 }
 
 .stand-item_header-main {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   font-size: 27px;
   color: rgba(0, 0, 0);
@@ -129,22 +156,21 @@ body::-webkit-scrollbar {
   z-index: 99999;
 }
 .nav-left {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 15px;
 }
 
-.backButton {
-  opacity: 0;
-  transform: translateX(70%);
-  font-size: 24px;
-  transition: all 350ms ease-in;
-  transition-delay: 700ms;
-}
-.backButton.slideIn {
+/* .backButton.slideIn {
   opacity: 1;
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
   transform: translateX(0);
+  -webkit-transition: all 350ms ease-in;
+  -o-transition: all 350ms ease-in;
   transition: all 350ms ease-in;
-}
+} */
 
 .search_container {
   position: sticky;
@@ -153,7 +179,11 @@ body::-webkit-scrollbar {
   padding-bottom: 8px;
 }
 .search {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   padding: 8px 16px;
   background-color: rgba(0, 0, 0, 0.05);
@@ -170,6 +200,8 @@ body::-webkit-scrollbar {
 .search input {
   border: 0;
   max-width: 100%;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
   flex: 1;
   background: transparent;
   color: rgba(0, 0, 0, 0.35);
@@ -179,12 +211,32 @@ body::-webkit-scrollbar {
   outline: 0;
 }
 
+.search input::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.search input::-moz-placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.search input:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.search input::-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.35);
+}
+
 .search input::placeholder {
   color: rgba(0, 0, 0, 0.35);
 }
 
 .cart {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   gap: 8px;
   background-color: rgba(0, 0, 0, 0.05);
@@ -197,7 +249,12 @@ body::-webkit-scrollbar {
 }
 
 .modal-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
 }
 .modal-b-title {
@@ -216,6 +273,8 @@ body::-webkit-scrollbar {
   height: 100px;
   width: 100%;
   display: block;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(#ffffff));
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   z-index: 999999;
 }
