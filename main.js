@@ -1,13 +1,8 @@
 // MAIN SCRIPT - ON DOCUMENT READY
 
 $(document).ready(() => {
-  /* let testTL = gsap.timeline();
-  testTL.to(".logo", { opacity: 0, duration: 1 }); */
-  //console.log(testTL);
   const container = document.querySelector("body");
   const header = document.querySelector("#header");
-  const navLeft = header.querySelector(".nav-left");
-  const navRight = header.querySelector(".nav-right");
   const search = document.querySelector(".search_container");
   const itemsList = document.querySelector(".stand-items");
   const items = itemsList.querySelectorAll(".stand-item");
@@ -15,11 +10,16 @@ $(document).ready(() => {
   const modals = document.querySelectorAll(".modal");
 
   // Get container padding to dynamically adapt modals inner spacing
-  const containerPaddingLeft = $(container).css("padding-left");
-  const containerPaddingRight = $(container).css("padding-right");
+  let containerPaddingLeft = $(container).css("padding-left");
+  let containerPaddingRight = $(container).css("padding-right");
+
+  // Set modal padding in order to mimic container padding dinamically
+  header.style.paddingLeft = containerPaddingLeft;
+  header.style.paddingRight = containerPaddingRight;
+  header.style.marginLeft = `-${containerPaddingLeft}`;
+  header.style.marginRight = `-${containerPaddingRight}`;
 
   // Get header height to dynamically set an offset for modal & search positioning
-
   const headerHeight = header.offsetHeight;
 
   //Handle modals sizing on DOM ready
@@ -28,7 +28,7 @@ $(document).ready(() => {
 
   //Handle search "top" offset by headerHeight
 
-  search.style.top = `${headerHeight}px`;
+  search.style.top = `${headerHeight + 15}px`;
 
   items.forEach(item => {
     const itemHeader = item.querySelector(".stand-item_header");
@@ -56,20 +56,18 @@ $(document).ready(() => {
 
     modalTL.fromTo(
       itemHeaderAll,
-      { yPercent: 0, opacity: 1 },
+      { xPercent: 0, opacity: 1 },
       {
-        yPercent: -60,
+        xPercent: -60,
         opacity: 0,
         stagger: {
           from: "start",
           axis: "x",
-          amount: 0.2
+          ease: "power2.in",
+          each: 0.1
         }
       }
     );
-    /* modalTL.fromTo(navLeft, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, ">");
-    modalTL.fromTo(navRight, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, "<");
-    modalTL.fromTo(search, { yPercent: 0, opacity: 1 }, { yPercent: -30, opacity: 0, ease: "power2.in", duration: 0.05 }, "<+=0.03"); */
 
     modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, "<+=0.25");
     modalTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, ">");
@@ -106,6 +104,11 @@ $(document).ready(() => {
   // MAIN SCRIPT - ON WINDOW RESIZE
 
   $(window).resize(function () {
+    // Set modal padding in order to mimic container padding dinamically
+    header.style.paddingLeft = containerPaddingLeft;
+    header.style.paddingRight = containerPaddingRight;
+    header.style.marginLeft = `-${containermarginLeft}`;
+    header.style.marginRight = `-${containerPaddingRight}`;
     // Handle modals sizing on resize
 
     handleModalSizing(container, modals);
@@ -130,8 +133,6 @@ function handleModalSizing(containerEl, modals, offsetHeight = 0) {
   let modalWidth = `${windowWidth}px`;
 
   modals.forEach(modal => {
-    let modalDialog = modal.querySelector(".modal-dialog");
-
     // Modal
     modal.style.top = `${offsetHeight}px`;
     modal.style.left = `${containerLeft}px`;

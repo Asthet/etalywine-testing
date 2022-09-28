@@ -148,7 +148,6 @@ body::-webkit-scrollbar {
   position: sticky;
   background-color: white;
   top: 0;
-  padding-bottom: 16px;
   z-index: 99;
 }
 
@@ -175,8 +174,8 @@ body::-webkit-scrollbar {
 .search_container {
   position: sticky;
   z-index: 100;
-  background: white;
   padding-bottom: 8px;
+  margin-bottom: 15px;
 }
 .search {
   display: -webkit-box;
@@ -186,11 +185,12 @@ body::-webkit-scrollbar {
   -ms-flex-align: center;
   align-items: center;
   padding: 8px 16px;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgb(242 242 242);
   border-radius: 8px;
   font-size: 16px;
   color: rgba(0, 0, 0, 0.35);
   margin-bottom: 16px;
+  box-shadow: 0px 2px 3px 1px rgb(0 0 0 / 14%);
 }
 
 .search i {
