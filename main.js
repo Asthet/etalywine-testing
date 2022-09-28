@@ -52,8 +52,8 @@ $(document).ready(() => {
     });
 
     openingTL.fromTo(itemModal, { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 });
-    openingTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 });
-    openingTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 }, "<");
+    openingTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 }, "<+=0.25");
+    openingTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.35 }, "<+=0.25");
     openingTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35 }, "<");
     openingTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35 }, "<+=0.15");
     openingTL.fromTo(
@@ -62,7 +62,7 @@ $(document).ready(() => {
       {
         yPercent: 0,
         opacity: 1,
-        duration: 0.35,
+        duration: 0.5,
         stagger: {
           from: "end",
           axis: "y",
