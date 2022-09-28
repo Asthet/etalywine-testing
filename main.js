@@ -97,7 +97,7 @@ $(document).ready(() => {
         }
       }
     );
-    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=0.95");
+    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=1");
     modalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, ">");
     modalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, "<");
 
