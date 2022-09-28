@@ -54,9 +54,6 @@ $(document).ready(() => {
       }
     });
 
-    modalTL.fromTo(navLeft, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 });
-    modalTL.fromTo(navRight, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, "<");
-    modalTL.fromTo(search, { yPercent: 0, opacity: 1 }, { yPercent: -30, opacity: 0, ease: "power2.in", duration: 0.15 }, "<+=0.03");
     modalTL.fromTo(
       itemHeaderAll,
       { yPercent: 0, opacity: 1 },
@@ -66,17 +63,17 @@ $(document).ready(() => {
         stagger: {
           from: "start",
           axis: "x",
-          ease: "power2.in",
-          amount: 0.15
+          amount: 0.25
         }
       }
     );
+    modalTL.fromTo(navLeft, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, ">-=0.25");
+    modalTL.fromTo(navRight, { yPercent: 0, opacity: 1 }, { yPercent: -10, opacity: 0, ease: "power2.in", duration: 0.05 }, "<");
+    modalTL.fromTo(search, { yPercent: 0, opacity: 1 }, { yPercent: -30, opacity: 0, ease: "power2.in", duration: 0.15 }, "<+=0.03");
 
-    modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, ">-=0.35");
-    modalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<");
-    modalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<");
-    modalTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, ">");
-    modalTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<+=0.25");
+    modalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.45 }, ">-=0.25");
+    modalTL.fromTo(modalBTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, ">-=0.3");
+    modalTL.fromTo(modalTitle, { yPercent: -30, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "power2.in", duration: 0.35 }, "<+=0.3");
     modalTL.fromTo(
       modalP,
       { yPercent: -30, opacity: 0 },
@@ -91,7 +88,9 @@ $(document).ready(() => {
         }
       }
     );
-    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=0.45");
+    modalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.45 }, "<-=0.55");
+    modalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, ">");
+    modalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.45 }, "<");
 
     modalTL.pause();
 
