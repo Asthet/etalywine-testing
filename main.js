@@ -107,7 +107,7 @@ $(document).ready(() => {
     // Set modal padding in order to mimic container padding dinamically
     header.style.paddingLeft = containerPaddingLeft;
     header.style.paddingRight = containerPaddingRight;
-    header.style.marginLeft = `-${containermarginLeft}`;
+    header.style.marginLeft = `-${containerPaddingLeft}`;
     header.style.marginRight = `-${containerPaddingRight}`;
     // Handle modals sizing on resize
 
