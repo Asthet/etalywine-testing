@@ -29,7 +29,6 @@ $(document).ready(() => {
   //Handle search "top" offset by headerHeight
 
   search.style.top = `${headerHeight + 15}px`;
-  console.log(items);
   search.addEventListener("keyup", e => {
     [...items].map(item => {
       let stand = item.querySelector(".stand-num");
