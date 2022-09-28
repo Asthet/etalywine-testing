@@ -267,6 +267,7 @@ body::-webkit-scrollbar {
 
 .halo {
   position: fixed;
+  pointer-events: none;
   bottom: 0;
   left: 0;
   right: 0;
