@@ -41,6 +41,7 @@ $(document).ready(() => {
     });
   });
 
+  // On each modal operations
   items.forEach(item => {
     const itemHeader = item.querySelector(".stand-item_header");
     const itemModal = item.querySelector(".modal");
@@ -51,7 +52,18 @@ $(document).ready(() => {
     //const modalBTitle = itemModal.querySelector(".modal-b-title");
     //const modalTitle = itemModal.querySelector(".modal-title");
     const modalBody = itemModal.querySelector(".modal-body");
-    const modalP = modalBody.querySelectorAll("p");
+    const modalP = modalBody.querySelectorAll(".product-card");
+    const modalFilters = modalBody.querySelector(".filters");
+    const modalFiltersColl = modalFilters ? modalFilters.querySelectorAll("span") : false;
+
+    // Simulate filter tabs selectors
+    if (modalFilters) {
+      modalFiltersColl.forEach(filter => {
+        $(filter).on("click", e => {
+          handleActiveState(e.target);
+        });
+      });
+    }
 
     // GSAP TIMELINE
 
@@ -78,21 +90,22 @@ $(document).ready(() => {
         }
       }
     );
-
-    slideInModalTL.fromTo(
-      modalP,
-      { yPercent: -10, opacity: 0 },
-      {
-        yPercent: 0,
-        opacity: 1,
-        stagger: {
-          from: "start",
-          axis: "y",
-          ease: "power2.in",
-          amount: 0.2
+    if (modalFilters) {
+      slideInModalTL.fromTo(
+        modalP,
+        { yPercent: -10, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          stagger: {
+            from: "start",
+            axis: "x",
+            ease: "power2.inOut",
+            each: 0.15
+          }
         }
-      }
-    );
+      );
+    }
     slideInModalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.25, ease: "power2.out" }, "<-=0.50");
     slideInModalTL.fromTo(itemModal, { opacity: 0 }, { opacity: 1, duration: 0.25 }, "<");
     slideInModalTL.fromTo(backButton, { xPercent: 70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.25 }, ">");
@@ -137,7 +150,6 @@ $(document).ready(() => {
       }
     });
   });
-
   // MAIN SCRIPT - ON WINDOW RESIZE
 
   $(window).resize(function () {
@@ -147,7 +159,6 @@ $(document).ready(() => {
     header.style.marginLeft = `-${containerPaddingLeft}`;
     header.style.marginRight = `-${containerPaddingRight}`;
     // Handle modals sizing on resize
-
     handleModalSizing(container, modals);
   });
 });
@@ -176,4 +187,15 @@ function handleModalSizing(containerEl, modals, offsetHeight = 0) {
     modal.style.height = modalHeight;
     modal.style.width = modalWidth;
   });
+}
+
+function handleActiveState(item) {
+  if (!$(item).hasClass("active")) {
+    $(item)
+      .siblings()
+      .each(function () {
+        $(this).hasClass("active") && $(this).removeClass("active");
+      });
+    $(item).addClass("active");
+  }
 }
