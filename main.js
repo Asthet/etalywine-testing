@@ -26,9 +26,12 @@ $(document).ready(() => {
 
   handleModalSizing(container, modals);
 
-  //Handle search "top" offset by headerHeight
+  // Handle search "top" offset by headerHeight
 
   search.style.top = `${headerHeight + 15}px`;
+
+  // Live search in main products page
+  // add event listener to search input -> on key up filter element corresponding to string or stand id
   search.addEventListener("keyup", e => {
     [...items].map(item => {
       let stand = item.querySelector(".stand-num");
@@ -37,7 +40,7 @@ $(document).ready(() => {
 
       let itemTitle = item.querySelector(".modal-title").innerText.toLowerCase();
 
-      !itemTitle.includes(e.target.value.toLowerCase()) ? ((itemTitle.includes(e.target.value.toLowerCase()) && standText.includes(e.target.value.toLowerCase())) || standID === e.target.value ? (item.style.display = "block") : (item.style.display = "none")) : (item.style.display = "block");
+      !itemTitle.includes(e.target.value.toLowerCase()) ? (standID === e.target.value ? (item.style.display = "block") : (item.style.display = "none")) : (item.style.display = "block");
     });
   });
 
@@ -56,6 +59,7 @@ $(document).ready(() => {
     const modalFilters = modalBody.querySelector(".filters");
     const modalFiltersColl = modalFilters ? modalFilters.querySelectorAll("span") : false;
 
+    // Split modal title and rebuild it in sub elements for modal title with more than 1 words
     handleMultipleWordsTags(modalTitle);
 
     // Simulate filter tabs selectors
@@ -68,6 +72,8 @@ $(document).ready(() => {
     }
 
     // GSAP TIMELINE
+
+    // Create slide in GSAP TL animation
 
     const slideInModalTL = gsap.timeline({
       onStart: () => {
@@ -87,7 +93,7 @@ $(document).ready(() => {
         stagger: {
           from: "start",
           axis: "x",
-          ease: "power2.in",
+          ease: "power2.inOut",
           each: 0.05
         }
       }
@@ -105,7 +111,8 @@ $(document).ready(() => {
             ease: "power2.inOut",
             each: 0.15
           }
-        }
+        },
+        ">-=0.05"
       );
     }
     slideInModalTL.fromTo(itemModal, { xPercent: 100 }, { xPercent: 0, duration: 0.25, ease: "power2.out" }, "<-=0.50");
@@ -114,6 +121,8 @@ $(document).ready(() => {
     slideInModalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.25 }, "<");
     slideInModalTL.staggerFromTo(modalHeaderEl, 0.075, { opacity: 0 }, { opacity: 1, ease: "Power1.easeOut" }, 0.1, "<-=0.05");
     slideInModalTL.staggerFromTo(modalHeaderEl, 0.1, { yPercent: 30 }, { yPercent: 0, ease: "Power2.easeOut" }, 0.1, "<");
+
+    // if modal title ( cantine page title ) is greater than 1 word apply a specific animation pattern
     if (modalTitle.children.length > 0) {
       slideInModalTL.fromTo(
         modalTitle.querySelectorAll(".sub"),
@@ -147,23 +156,30 @@ $(document).ready(() => {
 
     slideInModalTL.pause();
 
-    const slideOutModal = new gsap.timeline({
+    // Create slide out GSAP TL animation
+    const slideOutModalTL = new gsap.timeline({
       onEnd: () => {
         $(itemModal).modal("show");
       }
     });
 
-    slideOutModal.set(itemHeaderAll, { xPercent: 0, opacity: 1 });
-    slideOutModal.to(itemModal, { xPercent: 100, duration: 0.35, ease: "power2.in" });
+    slideOutModalTL.set(itemHeaderAll, { xPercent: 0, opacity: 1 });
+    slideOutModalTL.to(itemModal, { xPercent: 100, duration: 0.35, ease: "power2.in" });
 
-    slideOutModal.pause();
+    slideOutModalTL.pause();
 
+    // Add event listeners to modal header ( main page )
     itemHeader.addEventListener("click", () => {
+      // add a browser history fake state to simulate normal routing behaviour
       history.pushState("modal-open", "null", "");
+      // add a one-time event listener to "popstate" (back browser action)
       window.addEventListener(
         "popstate",
         () => {
-          slideOutModal.restart();
+          // init modal slide out TL animation if user go back in browser history
+          // to create a page transition effect -> callback onEnd to .hide() bs trigger
+          slideOutModalTL.restart();
+          // go back in browser history state
           if (history.state == "modal-open") {
             window.history.back();
           }
@@ -172,11 +188,14 @@ $(document).ready(() => {
           once: true
         }
       );
+      // init modal slide in TL animation -> callback onStart to .show() bs trigger
       slideInModalTL.restart();
     });
-
+    // Add event listeners to back button inside cantine "page"
     backButton.addEventListener("click", () => {
-      slideOutModal.restart();
+      // init modal slide out TL animation using back button UI element -> callback onEnd to .hide() bs trigger
+      slideOutModalTL.restart();
+      // go back in browser history state
       if (history.state == "modal-open") {
         window.history.back();
       }
@@ -198,17 +217,25 @@ $(document).ready(() => {
 // FUNCTIONS
 
 function handleMultipleWordsTags(el) {
+  // check if the cantine name is made up by more than one words
   if (el.innerText.trim().indexOf(" ") != -1) {
-    let words = el.innerText.split(" ");
-    el.innerText = "";
+    let words = el.innerText.split(" "); // create an array of title's elements
+    el.innerText = ""; // empty title text content
+
+    // loop through el words array to create sub DOM elements
     words.map((word, index, words) => {
+      // check if exist a previous element and if its length its less than 3 chars
       if (index - 1 >= 0 && words[index - 1].length < 3) {
+        // if prev el is less than 3 chars add to it the current one
         el.lastElementChild.innerText += "  " + word;
       } else {
+        // create sub elements with "sub" class and current word as innerText
         let subEl = document.createElement("span");
         subEl.classList.add("sub");
         subEl.innerText = word;
+        // append sub el to the parent DOM element
         el.appendChild(subEl);
+        //if it's not the first word, add a space between sub elements
         if (index !== 0) {
           el.appendChild(document.createTextNode(" "));
         }
@@ -242,6 +269,7 @@ function handleModalSizing(containerEl, modals, offsetHeight = 0) {
 }
 
 function handleActiveState(item) {
+  //just toggle active state class between siblings nav list labels to simulate a products tab sys
   if (!$(item).hasClass("active")) {
     $(item)
       .siblings()
