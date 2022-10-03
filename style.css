@@ -501,3 +501,8 @@ small.price-details {
   -ms-transform: scale(0.85);
   transform: scale(0.85);
 }
+@media only screen and (max-width: 575.99) {
+  .sub {
+    display: block;
+  }
+}

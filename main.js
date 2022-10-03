@@ -50,11 +50,13 @@ $(document).ready(() => {
     const modalHeader = itemModal.querySelector(".modal-header");
     const modalHeaderEl = modalHeader.querySelectorAll(".modal-header-el");
     //const modalBTitle = itemModal.querySelector(".modal-b-title");
-    //const modalTitle = itemModal.querySelector(".modal-title");
+    const modalTitle = itemModal.querySelector(".modal-title");
     const modalBody = itemModal.querySelector(".modal-body");
     const modalP = modalBody.querySelectorAll(".product-card");
     const modalFilters = modalBody.querySelector(".filters");
     const modalFiltersColl = modalFilters ? modalFilters.querySelectorAll("span") : false;
+
+    handleMultipleWordsTags(modalTitle);
 
     // Simulate filter tabs selectors
     if (modalFilters) {
@@ -112,6 +114,36 @@ $(document).ready(() => {
     slideInModalTL.fromTo(cartButton, { xPercent: -70, opacity: 0 }, { xPercent: 0, opacity: 1, ease: "power2.in", duration: 0.25 }, "<");
     slideInModalTL.staggerFromTo(modalHeaderEl, 0.075, { opacity: 0 }, { opacity: 1, ease: "Power1.easeOut" }, 0.1, "<-=0.05");
     slideInModalTL.staggerFromTo(modalHeaderEl, 0.1, { yPercent: 30 }, { yPercent: 0, ease: "Power2.easeOut" }, 0.1, "<");
+    if (modalTitle.children.length > 0) {
+      slideInModalTL.fromTo(
+        modalTitle.querySelectorAll(".sub"),
+        { opacity: 0 },
+        {
+          opacity: 1,
+          stagger: {
+            from: "start",
+            axis: "x",
+            ease: "power1.easeOut",
+            each: 0.15
+          }
+        },
+        "<"
+      );
+      slideInModalTL.fromTo(
+        modalTitle.querySelectorAll(".sub"),
+        { yPercent: 30 },
+        {
+          yPercent: 0,
+          stagger: {
+            from: "start",
+            axis: "x",
+            ease: "power2.easeOut",
+            each: 0.15
+          }
+        },
+        "<"
+      );
+    }
 
     slideInModalTL.pause();
 
@@ -164,6 +196,26 @@ $(document).ready(() => {
 });
 
 // FUNCTIONS
+
+function handleMultipleWordsTags(el) {
+  if (el.innerText.trim().indexOf(" ") != -1) {
+    let words = el.innerText.split(" ");
+    el.innerText = "";
+    words.map((word, index, words) => {
+      if (index - 1 >= 0 && words[index - 1].length < 3) {
+        el.lastElementChild.innerText += "  " + word;
+      } else {
+        let subEl = document.createElement("span");
+        subEl.classList.add("sub");
+        subEl.innerText = word;
+        el.appendChild(subEl);
+        if (index !== 0) {
+          el.appendChild(document.createTextNode(" "));
+        }
+      }
+    });
+  }
+}
 
 function handleModalSizing(containerEl, modals, offsetHeight = 0) {
   // select container element and get left position to eventually fix modal pos
