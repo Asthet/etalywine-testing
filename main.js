@@ -65,11 +65,22 @@ $(document).ready(() => {
     // Simulate filter tabs selectors
     if (modalFilters) {
       modalFiltersColl.forEach(filter => {
+        xPos = filter.getBoundingClientRect().left;
+        halfWidth = filter.clientWidth;
+        dotPos = xPos + halfWidth;
+
+        console.log(filter, xPos, halfWidth, dotPos);
+
         $(filter).on("click", e => {
           handleActiveState(e.target);
         });
       });
     }
+    $(itemModal).on("shown.bs.modal", function () {
+      $(window).resize(function () {
+        handleDotPosition(modalFiltersColl, container);
+      });
+    });
 
     // GSAP TIMELINE
 
@@ -81,6 +92,9 @@ $(document).ready(() => {
         itemModal.style.paddingLeft = containerPaddingLeft;
         itemModal.style.paddingRight = containerPaddingRight;
         $(itemModal).modal("show");
+      },
+      onComplete: () => {
+        handleDotPosition(modalFiltersColl, container);
       }
     });
 
@@ -158,8 +172,8 @@ $(document).ready(() => {
 
     // Create slide out GSAP TL animation
     const slideOutModalTL = new gsap.timeline({
-      onEnd: () => {
-        $(itemModal).modal("show");
+      onComplete: () => {
+        $(itemModal).modal("hide");
       }
     });
 
@@ -278,4 +292,41 @@ function handleActiveState(item) {
       });
     $(item).addClass("active");
   }
+}
+
+function handleDotPosition(refItems, container) {
+  //console.log(parseFloat($(container).css("padding-left")));
+  let dot = document.querySelector("#dot");
+  let dotContainer = document.querySelector("#dotContainer");
+  console.log(dotContainer.style.maxHeight);
+  let cy = parseInt(dotContainer.style.maxHeight) / 2;
+
+  refItems.forEach((item, i) => {
+    let itemRect = item.getBoundingClientRect();
+    let xPos = itemRect.x;
+    let halfWidth = itemRect.width / 2;
+    let strokeWidth = cy;
+    let dotPos = xPos + halfWidth - cy * 2 + strokeWidth * 2 - parseFloat($(container).css("padding-left"));
+    let firstRender = true;
+
+    if (item.classList.contains("active") && firstRender === true) {
+      dot.setAttribute("stroke-width", strokeWidth);
+      dot.setAttribute("x1", dotPos);
+      dot.setAttribute("x2", dotPos);
+      dot.setAttribute("y1", cy);
+      dot.setAttribute("y2", cy);
+    }
+
+    item.addEventListener("click", e => {
+      firstRender = false;
+      let tl = new gsap.timeline();
+      tl.to(dot, { attr: { x2: dotPos, strokeWidth: 0, ease: Power2.easeIn } });
+      tl.to(dot, { attr: { x1: dotPos, ease: Elastic.easeOut.config(1, 0.76) } }, "<");
+      tl.to(dot, { attr: { x1: dotPos, strokeWidth, ease: Elastic.easeOut.config(1, 0.8) } }, "<");
+      tl.timeScale(2);
+
+      /* dot.setAttribute("x1", dotPos);
+      dot.setAttribute("x2", dotPos); */
+    });
+  });
 }
