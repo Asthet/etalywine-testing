@@ -256,7 +256,7 @@ body::-webkit-scrollbar {
   display: -ms-flexbox;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   padding: 24px 0px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   -webkit-box-pack: justify;

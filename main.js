@@ -305,8 +305,8 @@ function handleDotPosition(refItems, container) {
     let itemRect = item.getBoundingClientRect();
     let xPos = itemRect.x;
     let halfWidth = itemRect.width / 2;
-    let strokeWidth = cy;
-    let dotPos = xPos + halfWidth - cy * 2 + strokeWidth * 2 - parseFloat($(container).css("padding-left"));
+    let strokeWidth = cy * 2;
+    let dotPos = xPos + halfWidth - cy * 2 + strokeWidth - parseFloat($(container).css("padding-left"));
     let firstRender = true;
 
     if (item.classList.contains("active") && firstRender === true) {
