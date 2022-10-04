@@ -56,29 +56,28 @@ $(document).ready(() => {
     const modalTitle = itemModal.querySelector(".modal-title");
     const modalBody = itemModal.querySelector(".modal-body");
     const modalP = modalBody.querySelectorAll(".product-card");
-    const modalFilters = modalBody.querySelector(".filters");
-    const modalFiltersColl = modalFilters ? modalFilters.querySelectorAll("span") : false;
+    const modalTabsNavs = modalBody.querySelector(".tabs-nav_container");
+    const modalTabsNavsElements = modalTabsNavs ? modalTabsNavs.querySelectorAll("span") : false;
 
     // Split modal title and rebuild it in sub elements for modal title with more than 1 words
     handleMultipleWordsTags(modalTitle);
 
     // Simulate filter tabs selectors
-    if (modalFilters) {
-      modalFiltersColl.forEach(filter => {
+    if (modalTabsNavs) {
+      modalTabsNavsElements.forEach(filter => {
         xPos = filter.getBoundingClientRect().left;
         halfWidth = filter.clientWidth;
         dotPos = xPos + halfWidth;
 
-        console.log(filter, xPos, halfWidth, dotPos);
-
         $(filter).on("click", e => {
           handleActiveState(e.target);
+          handleTabScroll(filter);
         });
       });
     }
     $(itemModal).on("shown.bs.modal", function () {
       $(window).resize(function () {
-        handleDotPosition(modalFiltersColl, container);
+        handleDotPosition(modalTabsNavsElements, container);
       });
     });
 
@@ -92,9 +91,6 @@ $(document).ready(() => {
         itemModal.style.paddingLeft = containerPaddingLeft;
         itemModal.style.paddingRight = containerPaddingRight;
         $(itemModal).modal("show");
-      },
-      onComplete: () => {
-        handleDotPosition(modalFiltersColl, container);
       }
     });
 
@@ -109,10 +105,13 @@ $(document).ready(() => {
           axis: "x",
           ease: "power2.inOut",
           each: 0.05
+        },
+        onComplete: () => {
+          handleDotPosition(modalTabsNavsElements, container);
         }
       }
     );
-    if (modalFilters) {
+    if (modalTabsNavs) {
       slideInModalTL.fromTo(
         modalP,
         { yPercent: -10, opacity: 0 },
@@ -228,7 +227,7 @@ $(document).ready(() => {
   });
 });
 
-// FUNCTIONS
+// HANDLER FUNCTIONS
 
 function handleMultipleWordsTags(el) {
   // check if the cantine name is made up by more than one words
@@ -294,11 +293,28 @@ function handleActiveState(item) {
   }
 }
 
+function handleTabScroll(node) {
+  let slideWidth = window.innerWidth;
+  let tabContainer = document.querySelector(".tab-container");
+  let tabIndex = Array.prototype.indexOf.call(node.parentNode.children, node) + 1;
+  let currentTabIndex = tabContainer.getAttribute("tab-index");
+  tabContainer.setAttribute("tab-index", tabIndex);
+  let factor = Math.abs(currentTabIndex - tabIndex);
+  if (currentTabIndex < tabIndex) {
+    console.log(currentTabIndex, tabIndex, slideWidth);
+    tabContainer.scrollLeft += slideWidth * factor;
+
+    tabContainer.setAttribute("tab-scroll", slideWidth * factor);
+  } else {
+    console.log(currentTabIndex, tabIndex, slideWidth, factor);
+    tabContainer.scrollLeft -= slideWidth * factor;
+    tabContainer.setAttribute("tab-scroll", slideWidth * factor);
+  }
+}
+
 function handleDotPosition(refItems, container) {
-  //console.log(parseFloat($(container).css("padding-left")));
-  let dot = document.querySelector("#dot");
-  let dotContainer = document.querySelector("#dotContainer");
-  console.log(dotContainer.style.maxHeight);
+  let dot = container.querySelector("#dot");
+  let dotContainer = container.querySelector("#dotContainer");
   let cy = parseInt(dotContainer.style.maxHeight) / 2;
 
   refItems.forEach((item, i) => {
@@ -307,9 +323,8 @@ function handleDotPosition(refItems, container) {
     let halfWidth = itemRect.width / 2;
     let strokeWidth = cy * 2;
     let dotPos = xPos + halfWidth - cy * 2 + strokeWidth - parseFloat($(container).css("padding-left"));
-    let firstRender = true;
 
-    if (item.classList.contains("active") && firstRender === true) {
+    if (item.classList.contains("active")) {
       dot.setAttribute("stroke-width", strokeWidth);
       dot.setAttribute("x1", dotPos);
       dot.setAttribute("x2", dotPos);
@@ -317,16 +332,41 @@ function handleDotPosition(refItems, container) {
       dot.setAttribute("y2", cy);
     }
 
-    item.addEventListener("click", e => {
-      firstRender = false;
-      let tl = new gsap.timeline();
-      tl.to(dot, { attr: { x2: dotPos, strokeWidth: 0, ease: Power2.easeIn } });
-      tl.to(dot, { attr: { x1: dotPos, ease: Elastic.easeOut.config(1, 0.76) } }, "<");
-      tl.to(dot, { attr: { x1: dotPos, strokeWidth, ease: Elastic.easeOut.config(1, 0.8) } }, "<");
-      tl.timeScale(2);
+    if (dot.getAttribute("listener") !== true) {
+      item.addEventListener("click", e => {
+        let tl = new gsap.timeline();
 
-      /* dot.setAttribute("x1", dotPos);
-      dot.setAttribute("x2", dotPos); */
-    });
+        tl.to(dot, 0.3, {
+          attr: {
+            x2: dotPos
+          },
+          strokeWidth: 0,
+          ease: Power2.easeIn
+        })
+          .to(
+            dot,
+            1,
+            {
+              attr: {
+                x1: dotPos
+              },
+              ease: Elastic.easeOut.config(1, 0.76)
+            },
+            "+=0"
+          )
+          .to(
+            dot,
+            2,
+            {
+              strokeWidth: strokeWidth,
+              ease: Elastic.easeOut.config(1, 0.8)
+            },
+            "-=1"
+          );
+
+        tl.timeScale(1.85);
+      });
+      dot.setAttribute("listener", "true");
+    }
   });
 }

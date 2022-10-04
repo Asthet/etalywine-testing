@@ -251,7 +251,7 @@ body::-webkit-scrollbar {
   font-size: 43px;
 }
 
-.filters {
+.tabs-nav_container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -264,12 +264,12 @@ body::-webkit-scrollbar {
   justify-content: space-between;
 }
 
-.filter-container {
+.tabs-nav {
   display: flex;
   justify-content: space-between;
 }
 
-/* .filters span.active::after {
+/* .tabs-nav span.active::after {
   content: "";
   display: block;
   width: 6px;
@@ -279,7 +279,7 @@ body::-webkit-scrollbar {
   position: relative;
 } */
 
-.filters span {
+.tabs-nav span {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -296,11 +296,11 @@ body::-webkit-scrollbar {
   transition: all 300ms ease-out;
 }
 
-.filters span.active {
+.tabs-nav span.active {
   color: #000;
 }
 
-.filters span {
+.tabs-nav span {
   color: #8f8f8f;
   font-size: 14px;
 }
@@ -311,8 +311,22 @@ body::-webkit-scrollbar {
 
 .modal-body {
   padding-top: 0;
+  overflow-x: hidden;
 }
 
+.tab-container {
+  overflow-x: scroll;
+  display: flex;
+  scroll-snap-stop: always;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  width: 100%;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.tab-container::-webkit-scrollbar {
+  display: none;
+}
 .halo {
   position: fixed;
   pointer-events: none;
@@ -337,12 +351,14 @@ body::-webkit-scrollbar {
   -ms-flex-direction: column;
   flex-direction: column;
   width: 100%;
+  flex: 1 0 100%;
+  scroll-snap-align: start;
 }
 
 .product-card {
-  -webkit-box-flex: 0;
-  -ms-flex: 0 0 100%;
-  flex: 0 0 100%;
+  -webkit-box-flex: 1;
+  -ms-flex: 0 1 100%;
+  flex: 0 1 100%;
   position: relative;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
