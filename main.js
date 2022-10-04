@@ -59,7 +59,7 @@ $(document).ready(() => {
     const modalTabsNavs = modalBody.querySelector(".tabs-nav_container");
     const modalTabsNavsElements = modalTabsNavs ? modalTabsNavs.querySelectorAll("span") : false;
     const modalTabsContainer = modalBody.querySelector(".tab-container");
-    const modalTabs = modalTabsContainer.querySelectorAll(".tab");
+    const modalTabs = modalTabsContainer ? modalTabsContainer.querySelectorAll(".tab") : false;
 
     // Split modal title and rebuild it in sub elements for modal title with more than 1 words
     handleMultipleWordsTags(modalTitle);
@@ -102,11 +102,13 @@ $(document).ready(() => {
     };
     let tabObserver = new IntersectionObserver(tabObserverCallback, tabObserverOptions);
 
-    modalTabs.forEach(tab => {
-      if (!tab.isIntersecting) {
-        tabObserver.observe(tab);
-      }
-    });
+    if (modalTabs) {
+      modalTabs.forEach(tab => {
+        if (!tab.isIntersecting) {
+          tabObserver.observe(tab);
+        }
+      });
+    }
 
     // GSAP TIMELINE
 
@@ -211,7 +213,7 @@ $(document).ready(() => {
     // Add event listeners to modal header ( main page )
     itemHeader.addEventListener("click", () => {
       // add a browser history fake state to simulate normal routing behaviour
-      history.pushState("modal-open", "null", "");
+      history.pushState(`${slugify(modalTitle.innerText)}-modal`, "null", "/");
       // add a one-time event listener to "popstate" (back browser action)
       window.addEventListener(
         "popstate",
@@ -220,7 +222,7 @@ $(document).ready(() => {
           // to create a page transition effect -> callback onEnd to .hide() bs trigger
           slideOutModalTL.restart();
           // go back in browser history state
-          if (history.state == "modal-open") {
+          if (history.state == `${slugify(modalTitle.innerText)}-modal`) {
             window.history.back();
           }
         },
@@ -236,7 +238,7 @@ $(document).ready(() => {
       // init modal slide out TL animation using back button UI element -> callback onEnd to .hide() bs trigger
       slideOutModalTL.restart();
       // go back in browser history state
-      if (history.state == "modal-open") {
+      if (history.state == `${slugify(modalTitle.innerText)}-modal`) {
         window.history.back();
       }
     });
@@ -397,3 +399,31 @@ function handleDotPosition(refItems, container) {
     }
   });
 }
+
+/* barba.init({
+  sync: true,
+
+  transitions: [
+    {
+      async leave(data) {
+        console.log(data);
+      },
+
+      async enter(data) {
+        console.log(data);
+      },
+
+      async once(data) {
+        console.log(data);
+      }
+    }
+  ]
+});
+ */
+const slugify = str =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");

@@ -272,6 +272,7 @@ body::-webkit-scrollbar {
 .tabs-nav {
   display: flex;
   justify-content: space-between;
+  max-width: 80%;
 }
 
 /* .tabs-nav span.active::after {
@@ -358,6 +359,11 @@ body::-webkit-scrollbar {
   flex: 1 0 100%;
   scroll-snap-align: start;
   padding-bottom: 16px;
+  color: #000;
+}
+
+a.product-card_desc-header {
+  color: #000;
 }
 
 .product-card {
@@ -530,7 +536,7 @@ small.price-details {
 }
 
 #dot {
-  stroke: rgba(136, 71, 64, 1);
+  stroke: #9f211f;
 }
 @media only screen and (max-width: 575.99) {
   .sub {
