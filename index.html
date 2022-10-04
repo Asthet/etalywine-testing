@@ -78,13 +78,17 @@
                 </div>
                 <div class="modal-body">
                   <div class="tabs-nav_container">
-                    <div class="tabs-nav"><span class="active">Tous les vins</span><span>Populaires</span><span>Nouveautés</span></div>
+                    <div class="tabs-nav">
+                      <span class="active" data-tab="1">Tous les vins</span>
+                      <span data-tab="2">Populaires</span>
+                      <span data-tab="3">Nouveautés</span>
+                    </div>
                     <svg id="dotContainer" style="max-height: 6px; width: 100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                       <line id="dot" fill="none" stroke-linecap="round" stroke-miterlimit="10" />
                     </svg>
                   </div>
                   <div class="tab-container" tab-index="1">
-                    <div id="all" class="product-cards">
+                    <div class="tab product-cards" data-tab="1">
                       <div class="product-card">
                         <div class="product-card_addToFav">
                           <i class="ri-bookmark-line"></i>
@@ -140,7 +144,7 @@
                         <img class="product-card_img" src="images/winebottle.png" alt="wine bottle" />
                       </div>
                     </div>
-                    <div id="popular" class="product-cards">
+                    <div class="tab product-cards" data-tab="2">
                       <div class="product-card">
                         <div class="product-card_addToFav">
                           <i class="ri-bookmark-line"></i>
@@ -196,7 +200,7 @@
                         <img class="product-card_img" src="images/winebottle.png" alt="wine bottle" />
                       </div>
                     </div>
-                    <div id="new" class="product-cards">
+                    <div class="tab product-cards" data-tab="3">
                       <div class="product-card">
                         <div class="product-card_addToFav">
                           <i class="ri-bookmark-line"></i>

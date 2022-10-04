@@ -58,11 +58,13 @@ $(document).ready(() => {
     const modalP = modalBody.querySelectorAll(".product-card");
     const modalTabsNavs = modalBody.querySelector(".tabs-nav_container");
     const modalTabsNavsElements = modalTabsNavs ? modalTabsNavs.querySelectorAll("span") : false;
+    const modalTabsContainer = modalBody.querySelector(".tab-container");
+    const modalTabs = modalTabsContainer.querySelectorAll(".tab");
 
     // Split modal title and rebuild it in sub elements for modal title with more than 1 words
     handleMultipleWordsTags(modalTitle);
 
-    // Simulate filter tabs selectors
+    // Tab nav - Tabs selectors
     if (modalTabsNavs) {
       modalTabsNavsElements.forEach(filter => {
         xPos = filter.getBoundingClientRect().left;
@@ -75,10 +77,35 @@ $(document).ready(() => {
         });
       });
     }
+    // recalculate dot position responsively
     $(itemModal).on("shown.bs.modal", function () {
       $(window).resize(function () {
         handleDotPosition(modalTabsNavsElements, container);
       });
+    });
+
+    // create intersection observer for tabs
+
+    let tabObserverOptions = {
+      root: modalTabsContainer,
+      threshold: 0.25
+    };
+
+    let tabObserverCallback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          modalTabsContainer.setAttribute("tab-index", entry.target.dataset.tab);
+          handleActiveState(modalTabsNavs.querySelector(`[data-tab="${entry.target.dataset.tab}"]`));
+          handleDotPosition(modalTabsNavsElements, container);
+        }
+      });
+    };
+    let tabObserver = new IntersectionObserver(tabObserverCallback, tabObserverOptions);
+
+    modalTabs.forEach(tab => {
+      if (!tab.isIntersecting) {
+        tabObserver.observe(tab);
+      }
     });
 
     // GSAP TIMELINE
@@ -301,14 +328,9 @@ function handleTabScroll(node) {
   tabContainer.setAttribute("tab-index", tabIndex);
   let factor = Math.abs(currentTabIndex - tabIndex);
   if (currentTabIndex < tabIndex) {
-    console.log(currentTabIndex, tabIndex, slideWidth);
     tabContainer.scrollLeft += slideWidth * factor;
-
-    tabContainer.setAttribute("tab-scroll", slideWidth * factor);
   } else {
-    console.log(currentTabIndex, tabIndex, slideWidth, factor);
     tabContainer.scrollLeft -= slideWidth * factor;
-    tabContainer.setAttribute("tab-scroll", slideWidth * factor);
   }
 }
 
@@ -316,57 +338,62 @@ function handleDotPosition(refItems, container) {
   let dot = container.querySelector("#dot");
   let dotContainer = container.querySelector("#dotContainer");
   let cy = parseInt(dotContainer.style.maxHeight) / 2;
+  let strokeWidth = cy * 2;
+
+  // set dot fixed values
+
+  dot.setAttribute("stroke-width", strokeWidth);
+  dot.setAttribute("y1", cy);
+  dot.setAttribute("y2", cy);
+
+  // loop reference items to obtain mid position for each one
+  // and feed gsap timeline with current values
 
   refItems.forEach((item, i) => {
     let itemRect = item.getBoundingClientRect();
     let xPos = itemRect.x;
     let halfWidth = itemRect.width / 2;
-    let strokeWidth = cy * 2;
+    // calculate dot middle position for each loop item
     let dotPos = xPos + halfWidth - cy * 2 + strokeWidth - parseFloat($(container).css("padding-left"));
 
-    if (item.classList.contains("active")) {
-      dot.setAttribute("stroke-width", strokeWidth);
-      dot.setAttribute("x1", dotPos);
-      dot.setAttribute("x2", dotPos);
-      dot.setAttribute("y1", cy);
-      dot.setAttribute("y2", cy);
-    }
+    // create gsap timeline for the elastic-like animation
 
-    if (dot.getAttribute("listener") !== true) {
-      item.addEventListener("click", e => {
-        let tl = new gsap.timeline();
+    let tl = new gsap.timeline();
 
-        tl.to(dot, 0.3, {
+    tl.to(dot, 0.3, {
+      attr: {
+        x2: dotPos
+      },
+      strokeWidth: 0,
+      ease: Power2.easeIn
+    })
+      .to(
+        dot,
+        1,
+        {
           attr: {
-            x2: dotPos
+            x1: dotPos
           },
-          strokeWidth: 0,
-          ease: Power2.easeIn
-        })
-          .to(
-            dot,
-            1,
-            {
-              attr: {
-                x1: dotPos
-              },
-              ease: Elastic.easeOut.config(1, 0.76)
-            },
-            "+=0"
-          )
-          .to(
-            dot,
-            2,
-            {
-              strokeWidth: strokeWidth,
-              ease: Elastic.easeOut.config(1, 0.8)
-            },
-            "-=1"
-          );
+          ease: Elastic.easeOut.config(1, 0.76)
+        },
+        "+=0"
+      )
+      .to(
+        dot,
+        2,
+        {
+          strokeWidth: strokeWidth,
+          ease: Elastic.easeOut.config(1, 0.8)
+        },
+        "-=1"
+      );
 
-        tl.timeScale(1.85);
-      });
-      dot.setAttribute("listener", "true");
+    tl.timeScale(1.85);
+    tl.pause();
+
+    // use active state like animation trigger
+    if (item.classList.contains("active")) {
+      tl.restart();
     }
   });
 }
