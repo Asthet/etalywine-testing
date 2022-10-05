@@ -253,7 +253,7 @@ $(document).ready(() => {
   });
   // MAIN SCRIPT - ON WINDOW RESIZE
 
-  $(window).resize(function () {
+  $(window).on("resize touchmove", function () {
     // Set modal padding in order to mimic container padding dinamically
     header.style.paddingLeft = containerPaddingLeft;
     header.style.paddingRight = containerPaddingRight;

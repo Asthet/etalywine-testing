@@ -377,6 +377,7 @@ a.product-card_desc-header {
   justify-content: space-between;
   padding: 32px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: fit-content;
   max-height: 227px;
 }
 .product-card_addToFav {
@@ -520,7 +521,8 @@ small.price-details {
 .product-card_img {
   -o-object-fit: contain;
   object-fit: contain;
-  max-height: 162px;
+  max-width: 30%;
+  max-height: 152px;
 }
 
 .product-card_addToFav:hover,
