@@ -61,6 +61,14 @@ $(document).ready(() => {
     const modalTabsContainer = modalBody.querySelector(".tab-container");
     const modalTabs = modalTabsContainer ? modalTabsContainer.querySelectorAll(".tab") : false;
 
+    if ("content" in document.createElement("template") && modalTabs) {
+      const tproduct = document.querySelector(".template-product");
+      for (let index = 0; index < 5; index++) {
+        let clone = tproduct.content.cloneNode(true);
+        modalTabs[0].appendChild(clone);
+      }
+    }
+
     // Split modal title and rebuild it in sub elements for modal title with more than 1 words
     handleMultipleWordsTags(modalTitle);
 
@@ -213,7 +221,7 @@ $(document).ready(() => {
     // Add event listeners to modal header ( main page )
     itemHeader.addEventListener("click", () => {
       // add a browser history fake state to simulate normal routing behaviour
-      history.pushState(`${slugify(modalTitle.innerText)}-modal`, "null", "/");
+      history.pushState(`${slugify(modalTitle.innerText)}-modal`, "null", window.location.href);
       // add a one-time event listener to "popstate" (back browser action)
       window.addEventListener(
         "popstate",

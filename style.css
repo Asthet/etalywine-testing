@@ -377,6 +377,7 @@ a.product-card_desc-header {
   justify-content: space-between;
   padding: 32px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  max-height: 227px;
 }
 .product-card_addToFav {
   position: absolute;
