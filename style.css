@@ -19,7 +19,6 @@ body.modal-open {
   margin: 0;
   width: 100% !important;
   max-width: 100% !important;
-  overflow-y: scroll;
   position: relative;
   border-radius: 5px;
   -webkit-box-orient: vertical;
