@@ -10,8 +10,8 @@ $(document).ready(() => {
   const modals = document.querySelectorAll(".modal");
 
   // Get container padding to dynamically adapt modals inner spacing
-  let containerPaddingLeft = $(container).css("padding-left");
-  let containerPaddingRight = $(container).css("padding-right");
+  let containerPaddingLeft = $(container).css("padding-left") || "15px";
+  let containerPaddingRight = $(container).css("padding-right") || "15px";
 
   // Set modal padding in order to mimic container padding dinamically
   header.style.paddingLeft = containerPaddingLeft;
@@ -50,6 +50,7 @@ $(document).ready(() => {
     const itemModal = item.querySelector(".modal");
     const backButton = itemModal.querySelector(".backButton");
     const cartButton = itemModal.querySelector(".cart");
+    const modalContent = itemModal.querySelector(".modal-content");
     const modalHeader = itemModal.querySelector(".modal-header");
     const modalHeaderEl = modalHeader.querySelectorAll(".modal-header-el");
     //const modalBTitle = itemModal.querySelector(".modal-b-title");
@@ -117,6 +118,26 @@ $(document).ready(() => {
         }
       });
     }
+
+    // create intersection observer for modal title
+
+    let modalTitleObserverOptions = {
+      root: modalContent,
+      threshold: 0.25
+    };
+    const navTitle = document.createElement("span");
+    navTitle.classList.add("d-none");
+    navTitle.style.fontSize = "19px";
+    navTitle.innerText = modalTitle.innerText;
+    itemModal.querySelector(".navbar").appendChild(navTitle);
+    let modalTitleObserverCallback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+        }
+      });
+    };
+
+    let modalTitleObserver = new IntersectionObserver(modalTitleObserverCallback, modalTitleObserverOptions);
 
     // GSAP TIMELINE
 
@@ -255,6 +276,8 @@ $(document).ready(() => {
 
   $(window).on("resize touchmove", function () {
     // Set modal padding in order to mimic container padding dinamically
+    itemModal.style.paddingLeft = containerPaddingLeft;
+    itemModal.style.paddingRight = containerPaddingRight;
     header.style.paddingLeft = containerPaddingLeft;
     header.style.paddingRight = containerPaddingRight;
     header.style.marginLeft = `-${containerPaddingLeft}`;
